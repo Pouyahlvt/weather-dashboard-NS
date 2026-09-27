@@ -65,19 +65,9 @@ const Login_page = ({ name, setName }: Login_props) => {
         </div>
         <div className="w-[50%] h-full bg-[#D3E1E7] relative max-sm:hidden">
           <img
-            src="/login-images/rain-moon.png"
-            alt="rain-moon"
-            className="absolute w-6/10 -top-5 right-0 drop-shadow-2xl shadow-black"
-          />
-          <img
-            src="/login-images/rain-sun.png"
-            alt="rain-moon"
-            className="absolute w-6/10 inset-0 my-auto drop-shadow-2xl"
-          />
-          <img
-            src="/login-images/wind-moon.png"
-            alt="rain-moon"
-            className="absolute w-6/10 bottom-0 right-0 drop-shadow-2xl"
+            src="/login-images/light-form.png"
+            alt="light form"
+            className="w-full h-full object-cover"
           />
         </div>
       </section>

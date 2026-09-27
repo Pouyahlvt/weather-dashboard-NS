@@ -12,7 +12,7 @@ type Theme = "light" | "dark";
 interface AppContextType {
   language: Language;
   theme: Theme;
-
+  setTheme: (theme: Theme) => void;
   setLanguage: (language: Language) => void;
   toggleTheme: () => void;
 }
@@ -46,6 +46,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         theme,
         setLanguage,
         toggleTheme,
+        setTheme,
       }}>
       {children}
     </AppContext.Provider>
