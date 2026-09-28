@@ -18,11 +18,11 @@ export type WeatherCardData = {
   icon: string;
 };
 
-type CurrentWeatherCardProps = {
+type WeatherCardProps = {
   data: WeatherCardData;
 };
 
-export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
+export default function CurrentWeatherCard({ data }: WeatherCardProps) {
   const { t } = useTranslation();
 
   return (
@@ -43,7 +43,6 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
        bg-card-bg dark:bg-card-bg-dark text-text dark:text-text-dark
 
       `}>
-      {/* Top location */}
       <div
         className={`
           inline-flex
@@ -54,15 +53,14 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
           px-4
           py-2
           text-sm
-          bg-card-bg dark:bg-card-bg-dark text-text dark:text-text-dark
+          dark:bg-card-bg/20 bg-card-bg-dark/20 text-text dark:text-text-dark
           
         `}>
         <MapPin size={18} />
 
-        <span>{data.city}</span>
+        <span className="text-xl font-semibold">{data.city}</span>
       </div>
 
-      {/* Main content */}
       <div
         className="
           mt-5
@@ -73,14 +71,11 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
           sm:grid-cols-2
           sm:items-center
         ">
-        {/* Left information */}
         <div>
           <h2
             className="
-              text-3xl
+              text-xl
               font-medium
-              sm:text-4xl
-              md:text-5xl
             ">
             {data.date}
           </h2>
@@ -94,7 +89,6 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
             {data.time}
           </p>
 
-          {/* Temperature */}
           <div className="mt-4">
             <span
               className="
@@ -117,7 +111,6 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
             </span>
           </div>
 
-          {/* High / Low */}
           <div
             className={`
               mt-1
@@ -135,8 +128,6 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
             </span>
           </div>
         </div>
-
-        {/* Right weather information */}
         <div
           className="
             flex
@@ -149,6 +140,7 @@ export default function CurrentWeatherCard({ data }: CurrentWeatherCardProps) {
             src={data.icon}
             alt={data.description}
             className="
+            scale-150
               object-contain
             "
           />

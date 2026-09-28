@@ -46,7 +46,7 @@ export default function MonthlyAverageChart({
         bg-card-bg dark:bg-card-bg-dark p-4 ms:p-6
         text-text dark:text-text-dark
       ">
-      <h2 className="mb-2 text-right text-base font-medium text-text dark:text-text-dark sm:text-lg">
+      <h2 className="mb-2 text-right text-base font-medium text-text dark:text-text-dark sm:text-lg mx-5">
         {t("dashboard.avrage_title")}
       </h2>
 
@@ -58,7 +58,7 @@ export default function MonthlyAverageChart({
               data: labels,
               tickLabelStyle: {
                 fill: "currentcolor",
-                fontSize: 12,
+                fontSize: 10,
               },
               tickSize: 0,
             },

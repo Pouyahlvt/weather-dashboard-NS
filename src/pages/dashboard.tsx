@@ -2,6 +2,11 @@ import Navbar from "../components/Navbar/Navbar";
 import TemperatureChart from "../components/cards/YearlyCharts";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import PulseLoader from "../components/ui/loading";
+import { getForecast, type ForecastDay } from "../service/weatherAPI";
+import { Alert } from "@mui/material";
+import ForeCastCard from "../components/cards/forecastCard";
+import { getChartData } from "../service/chartAPI";
 
 import CurrentWeatherCard, {
   type WeatherCardData,
@@ -18,9 +23,13 @@ type ChartData = {
 };
 
 const Dashboard = ({ name }: Dashboard_props) => {
-  console.log(`Welcome ${name}`);
+  console.log("wellcome , ", name);
   const { t } = useTranslation();
-  const [weather, setWeather] = useState<WeatherCardData | null>({});
+  const [chartData, setChartData] = useState<ChartData[]>([]);
+
+  const [weather, setWeather] = useState<WeatherCardData | null>(null);
+
+  const [forecast, setForecast] = useState<ForecastDay[]>([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -29,18 +38,72 @@ const Dashboard = ({ name }: Dashboard_props) => {
   const language = t("commen.lng") as "en" | "fa";
 
   useEffect(() => {
+    async function fetchChart() {
+      try {
+        const data = await getChartData("new york", 14, language);
+        setChartData(data);
+      } catch (err) {
+        console.error("Chart fetch failed:", err);
+      }
+    }
+    fetchChart();
+  }, [language]);
+
+  useEffect(() => {
+    const fetchForecast = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getForecast("New York");
+
+        console.log("Forecast data:", data);
+
+        setForecast(data);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to load weather forecast.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchForecast();
+  }, []);
+
+  useEffect(() => {
     async function fetchWeather() {
       try {
         setLoading(true);
         setError(null);
 
-        const data = await getCurrentWeather("San Francisco", language);
+        const data = await getCurrentWeather("new york", language);
+
+        const now = new Date();
+
+        const date = now.toLocaleDateString(
+          language === "fa" ? "fa-IR" : "en-US",
+          {
+            weekday: "long",
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          },
+        );
+
+        const time = now.toLocaleTimeString(
+          language === "fa" ? "fa-IR" : "en-US",
+          {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          },
+        );
 
         const formattedWeather: WeatherCardData = {
           city: data.name,
 
-          date: "Monday",
-          time: "11:45 AM",
+          date,
+          time,
 
           temperature: data.main.temp,
 
@@ -52,12 +115,13 @@ const Dashboard = ({ name }: Dashboard_props) => {
 
           description: data.weather[0].description,
 
-          icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+          icon: `https://openweathermap.org/payload/api/media/file/${data.weather[0].icon}.png`,
         };
 
         setWeather(formattedWeather);
       } catch (error) {
-        setError(`Failed to get weather data. error : ${error}`);
+        setError(`Failed to get weather data :( `);
+        console.error(` error : ${error}`);
       } finally {
         setLoading(false);
       }
@@ -81,42 +145,51 @@ const Dashboard = ({ name }: Dashboard_props) => {
     { label: t("dashboard.months.11"), value: 32 },
   ];
 
-  const fakeOpenWeatherResponse: WeatherCardData = {
-    city: "San Francisco",
+  const fakeData: WeatherCardData = {
+    city: "New york",
+    date: "12/12/2020",
+    time: "12:12",
 
-    main: {
-      temp: 18.7,
-      feels_like: 17.9,
-      temp_min: 16.2,
-      temp_max: 20.5,
-      pressure: 1013,
-      humidity: 72,
-    },
+    temperature: 22,
+    high: 27,
+    low: 18,
+    feelsLike: 20,
 
-    weather: [
-      {
-        main: "Clouds",
-        description: "scattered clouds",
-        icon: "03d",
-      },
-    ],
+    description: "cloudy",
 
-    wind: {
-      speed: 4.6,
-    },
+    icon: "",
   };
 
   return (
     <main className="w-full min-h-screen bg-dashbord-bg dark:bg-dashbord-bg-dark transition-colors duration-300">
+      {error && <Alert severity="error">{error}</Alert>}
       <Navbar />
-      <section className="w-full flex gap-7 px-4 mt-20">
-        <div className="w-39/100 h-50">
-          <CurrentWeatherCard data={fakeOpenWeatherResponse} />
+      <section className="w-full flex gap-7 px-4 mt-10">
+        <div className="w-45/100 h-70  rounded-4xl relative">
+          <CurrentWeatherCard data={weather !== null ? weather : fakeData} />
+          {loading && <PulseLoader />}
         </div>
-        <div className="w-59/100 h-50 ">
-          <TemperatureChart data={defaultData} />
+        <div className="w-55/100 h-70  rounded-4xl relative">
+          <TemperatureChart data={chartData ? chartData : defaultData} />
+          {loading && <PulseLoader />}
         </div>
       </section>
+      <div className="px-5 pb-30 w-full mt-10">
+        <section
+          className="w-full h-100 bg-card-bg dark:bg-card-bg-dark mt-10  rounded-4xl relative 
+        shadow-[0_8px_25px_rgba(0,0,0,0.18)] flex justify-center">
+          {forecast.map((day, i) => (
+            <div key={`forcast-card-${i}`} className="w-1/7 m-5">
+              <ForeCastCard
+                day={i === 0 ? "ToDay" : day.weekday}
+                icon={`https://openweathermap.org/payload/api/media/file/${day.icon}.png`}
+                temp={day.temperature}
+              />
+            </div>
+          ))}
+          {loading && <PulseLoader />}
+        </section>
+      </div>
     </main>
   );
 };
