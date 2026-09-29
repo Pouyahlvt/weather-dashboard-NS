@@ -10,6 +10,7 @@ const en = {
     search: "Search Your Locations",
     weather: "Weather",
     avrage_title: "Tempretary avrage",
+    forecast_title: "Weel Forecast",
     weather_card: {
       high: "High",
       low: "Low",
@@ -28,6 +29,16 @@ const en = {
       10: "June", // Khordad
       11: "May", // Ordibehesht
       12: "April", // Farvardin
+    },
+    week: {
+      sat: "Sat",
+      sun: "Sun",
+      mon: "Mon",
+      tue: "Tues",
+      wed: "Wed",
+      thu: "Thurs",
+      fri: "Fri",
+      today: "ToDay",
     },
   },
 

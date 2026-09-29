@@ -38,7 +38,7 @@ export default function SettingsButton() {
     <>
       {/* Settings Icon Button */}
       <IconButton
-        className="text-text dark:text-text-dark "
+        className="text-text dark:text-text-dark w-12 h-12 max-sm:w-8 max-sm:h-8 "
         onClick={handleClick}
         aria-label="settings"
         sx={{
@@ -46,10 +46,8 @@ export default function SettingsButton() {
           color: "currentcolor",
           borderRadius: "10px",
           p: 1,
-          width: "55px",
-          marginX: "20px",
         }}>
-        <SettingsIcon className="scale-150 text-text dark:text-text-dark" />
+        <SettingsIcon className="scale-150 text-text dark:text-text-dark max-sm:scale-100" />
       </IconButton>
 
       {/* Settings Dropdown */}

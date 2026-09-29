@@ -1,11 +1,11 @@
 import Navbar from "../components/Navbar/Navbar";
-import TemperatureChart from "../components/cards/YearlyCharts";
+import AverageChart from "../components/cards/YearlyCharts";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import PulseLoader from "../components/ui/loading";
 import { getForecast, type ForecastDay } from "../service/weatherAPI";
 import { Alert } from "@mui/material";
-import ForeCastCard from "../components/cards/forecastCard";
+import Fortecast from "../components/cards/forcastSection";
 import { getChartData } from "../service/chartAPI";
 
 import CurrentWeatherCard, {
@@ -25,6 +25,8 @@ type ChartData = {
 const Dashboard = ({ name }: Dashboard_props) => {
   console.log("wellcome , ", name);
   const { t } = useTranslation();
+  const [city, setCity] = useState<string>("new york");
+
   const [chartData, setChartData] = useState<ChartData[]>([]);
 
   const [weather, setWeather] = useState<WeatherCardData | null>(null);
@@ -40,23 +42,21 @@ const Dashboard = ({ name }: Dashboard_props) => {
   useEffect(() => {
     async function fetchChart() {
       try {
-        const data = await getChartData("new york", 14, language);
+        const data = await getChartData(city, 14, language);
         setChartData(data);
       } catch (err) {
         console.error("Chart fetch failed:", err);
       }
     }
     fetchChart();
-  }, [language]);
+  }, [language, city]);
 
   useEffect(() => {
     const fetchForecast = async () => {
       try {
         setLoading(true);
 
-        const data = await getForecast("New York");
-
-        console.log("Forecast data:", data);
+        const data = await getForecast(city);
 
         setForecast(data);
       } catch (error) {
@@ -68,7 +68,7 @@ const Dashboard = ({ name }: Dashboard_props) => {
     };
 
     fetchForecast();
-  }, []);
+  }, [city]);
 
   useEffect(() => {
     async function fetchWeather() {
@@ -76,7 +76,7 @@ const Dashboard = ({ name }: Dashboard_props) => {
         setLoading(true);
         setError(null);
 
-        const data = await getCurrentWeather("new york", language);
+        const data = await getCurrentWeather(city, language);
 
         const now = new Date();
 
@@ -128,7 +128,7 @@ const Dashboard = ({ name }: Dashboard_props) => {
     }
 
     fetchWeather();
-  }, [language]);
+  }, [language, city]);
 
   const defaultData: ChartData[] = [
     { label: t("dashboard.months.1"), value: 15 },
@@ -146,16 +146,16 @@ const Dashboard = ({ name }: Dashboard_props) => {
   ];
 
   const fakeData: WeatherCardData = {
-    city: "New york",
-    date: "12/12/2020",
-    time: "12:12",
+    city: "City",
+    date: "00/00/0000",
+    time: "00:00",
 
-    temperature: 22,
-    high: 27,
-    low: 18,
-    feelsLike: 20,
+    temperature: 11,
+    high: 11,
+    low: 11,
+    feelsLike: 11,
 
-    description: "cloudy",
+    description: "describtion",
 
     icon: "",
   };
@@ -163,32 +163,20 @@ const Dashboard = ({ name }: Dashboard_props) => {
   return (
     <main className="w-full min-h-screen bg-dashbord-bg dark:bg-dashbord-bg-dark transition-colors duration-300">
       {error && <Alert severity="error">{error}</Alert>}
-      <Navbar />
+      <Navbar city={city} setCity={setCity} />
       <section className="w-full flex gap-7 px-4 mt-10">
         <div className="w-45/100 h-70  rounded-4xl relative">
           <CurrentWeatherCard data={weather !== null ? weather : fakeData} />
           {loading && <PulseLoader />}
         </div>
         <div className="w-55/100 h-70  rounded-4xl relative">
-          <TemperatureChart data={chartData ? chartData : defaultData} />
+          <AverageChart data={chartData ? chartData : defaultData} />
           {loading && <PulseLoader />}
         </div>
       </section>
-      <div className="px-5 pb-30 w-full mt-10">
-        <section
-          className="w-full h-100 bg-card-bg dark:bg-card-bg-dark mt-10  rounded-4xl relative 
-        shadow-[0_8px_25px_rgba(0,0,0,0.18)] flex justify-center">
-          {forecast.map((day, i) => (
-            <div key={`forcast-card-${i}`} className="w-1/7 m-5">
-              <ForeCastCard
-                day={i === 0 ? "ToDay" : day.weekday}
-                icon={`https://openweathermap.org/payload/api/media/file/${day.icon}.png`}
-                temp={day.temperature}
-              />
-            </div>
-          ))}
-          {loading && <PulseLoader />}
-        </section>
+      <div className="px-5 pb-30 w-full mt-10 relative">
+        <Fortecast data={forecast} />
+        {loading && <PulseLoader />}
       </div>
     </main>
   );

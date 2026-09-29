@@ -27,7 +27,7 @@ const defaultData: ChartData[] = [
   { label: "فروردین", value: 32 },
 ];
 
-export default function MonthlyAverageChart({
+export default function AverageChart({
   data = defaultData,
 }: MonthlyAverageChartProps) {
   const { t } = useTranslation();

@@ -24,18 +24,37 @@ interface AppProviderProps {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [language, setLanguage] = useState<Language>("en");
-  const [theme, setTheme] = useState<Theme>("light");
+  const [language, setLanguage] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem("language");
+
+    return savedLanguage === "fa" || savedLanguage === "en"
+      ? savedLanguage
+      : "en";
+  });
+
+  const [theme, setTheme] = useState<Theme>(() => {
+    const savedTheme = localStorage.getItem("theme");
+
+    return savedTheme === "dark" || savedTheme === "light"
+      ? savedTheme
+      : "light";
+  });
 
   const toggleTheme = () => {
     setTheme((current) => (current === "light" ? "dark" : "light"));
   };
 
+  // Save language + update direction
   useEffect(() => {
+    localStorage.setItem("language", language);
+
     document.documentElement.dir = language === "fa" ? "rtl" : "ltr";
   }, [language]);
 
+  // Save theme + update dark class
   useEffect(() => {
+    localStorage.setItem("theme", theme);
+
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
