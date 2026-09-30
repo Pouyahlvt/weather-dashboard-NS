@@ -7,6 +7,7 @@ import { getForecast, type ForecastDay } from "../service/weatherAPI";
 import { Alert } from "@mui/material";
 import Fortecast from "../components/cards/forcastSection";
 import { getChartData } from "../service/chartAPI";
+import Footer from "../components/footer/footer";
 
 import CurrentWeatherCard, {
   type WeatherCardData,
@@ -34,6 +35,8 @@ const Dashboard = ({ name }: Dashboard_props) => {
   const [forecast, setForecast] = useState<ForecastDay[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const [loadingChart, setLoadingChart] = useState(true);
+  const [loadingForecast, setLoadingForcast] = useState(true);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -42,10 +45,13 @@ const Dashboard = ({ name }: Dashboard_props) => {
   useEffect(() => {
     async function fetchChart() {
       try {
+        setLoadingChart(true);
         const data = await getChartData(city, 14, language);
         setChartData(data);
       } catch (err) {
         console.error("Chart fetch failed:", err);
+      } finally {
+        setLoadingChart(false);
       }
     }
     fetchChart();
@@ -54,7 +60,7 @@ const Dashboard = ({ name }: Dashboard_props) => {
   useEffect(() => {
     const fetchForecast = async () => {
       try {
-        setLoading(true);
+        setLoadingForcast(true);
 
         const data = await getForecast(city);
 
@@ -63,7 +69,7 @@ const Dashboard = ({ name }: Dashboard_props) => {
         console.error(error);
         setError("Failed to load weather forecast.");
       } finally {
-        setLoading(false);
+        setLoadingForcast(false);
       }
     };
 
@@ -164,20 +170,21 @@ const Dashboard = ({ name }: Dashboard_props) => {
     <main className="w-full min-h-screen bg-dashbord-bg dark:bg-dashbord-bg-dark transition-colors duration-300">
       {error && <Alert severity="error">{error}</Alert>}
       <Navbar city={city} setCity={setCity} />
-      <section className="w-full flex gap-7 px-4 mt-10">
-        <div className="w-45/100 h-70  rounded-4xl relative">
+      <section className="w-full flex gap-7 px-4 mt-10 max-sm:grid-cols-1 max-sm:grid">
+        <div className="w-45/100 h-70  rounded-4xl relative max-sm:w-full max-sm:h-90">
           <CurrentWeatherCard data={weather !== null ? weather : fakeData} />
           {loading && <PulseLoader />}
         </div>
-        <div className="w-55/100 h-70  rounded-4xl relative">
+        <div className="w-55/100 h-70  rounded-4xl relative max-sm:w-full">
           <AverageChart data={chartData ? chartData : defaultData} />
-          {loading && <PulseLoader />}
+          {loadingChart && <PulseLoader />}
         </div>
       </section>
-      <div className="px-5 pb-30 w-full mt-10 relative">
+      <div className="px-5 pb-30 w-full mt-10 relative max-sm:px-0">
         <Fortecast data={forecast} />
-        {loading && <PulseLoader />}
+        {loadingForecast && <PulseLoader />}
       </div>
+      <Footer />
     </main>
   );
 };

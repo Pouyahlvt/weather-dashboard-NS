@@ -9,6 +9,9 @@ const en = {
     title: "Weather dashboard",
     search: "Search Your Locations",
     weather: "Weather",
+    footer_text:
+      "All rights of this site are reserved for Nadin Sadr Aria Engineering Company.",
+    footer_contact: "Contact us",
     avrage_title: "Tempretary avrage",
     forecast_title: "Weel Forecast",
     weather_card: {

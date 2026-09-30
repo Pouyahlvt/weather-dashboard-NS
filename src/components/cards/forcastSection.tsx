@@ -16,15 +16,15 @@ const Fortecast = ({ data }: ForcastProps) => {
   return (
     <section
       className="w-full  bg-card-bg dark:bg-card-bg-dark mt-10  rounded-4xl relative 
-        shadow-[0_8px_25px_rgba(0,0,0,0.18)] ">
-      <h2 className="mx-10 text-2xl text-text dark:text-text-dark pt-5 font-semibold">
+        shadow-[0_8px_25px_rgba(0,0,0,0.18)] max-sm:rounded-none max-sm:bg-transparent max-sm:shadow-none">
+      <h2 className="mx-10 text-2xl text-text dark:text-text-dark pt-5 font-semibold max-md:text-lg max-md:mx-5 max-sm:text-center">
         Week forecast
       </h2>
       <div className="flex justify-center h-100 overflow-hidden overflow-x-auto">
         {data.map((day, i) => (
           <div
             key={`forcast-card-${i}`}
-            className="w-full my-2 mx-5 max-lg:mx-2 max-md:mx-2 min-w-30 ">
+            className="w-full my-2 mx-5 max-lg:mx-2 max-md:mx-2 min-w-30 max-md:min-w-20 max-sm:mx-1">
             <ForeCastCard
               day={
                 i === 0

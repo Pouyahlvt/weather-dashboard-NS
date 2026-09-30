@@ -15,10 +15,10 @@ const Navbar = ({ city, setCity }: NavProps) => {
 
   return (
     <section
-      className="w-full h-20 flex items-center justify-between shadow-xl/50 bg-dashbord-bg 
+      className="w-full h-20 flex items-center justify-between shadow-xl/50 bg-dashbord-bg max-sm:h-15
     dark:bg-dashbord-bg-dark transition-colors duration-300 dark:shadow-dashbord-bg/30">
       <div className="flex items-center ">
-        <div className="h-12 aspect-square overflow-hidden rounded-full bg-primary-700 mx-6 max-sm:h-8">
+        <div className="h-12 aspect-square overflow-hidden rounded-full bg-primary-700 mx-6 max-sm:h-8 max-sm:mx-2">
           <img
             src="/dashboard/weather-dashboard.png"
             alt="dashboard avatar"

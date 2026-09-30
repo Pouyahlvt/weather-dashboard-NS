@@ -32,13 +32,14 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
         w-full
         overflow-hidden
         rounded-[28px]
-        p-5
+        p-2
         h-70
         shadow-[0_8px_25px_rgba(0,0,0,0.18)]
         transition-colors
         duration-300
         sm:p-6
         md:p-7
+        max-sm:h-90
 
        bg-card-bg dark:bg-card-bg-dark text-text dark:text-text-dark
 
@@ -54,11 +55,14 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
           py-2
           text-sm
           dark:bg-card-bg/20 bg-card-bg-dark/20 text-text dark:text-text-dark
+          max-sm:px-2
           
         `}>
-        <MapPin size={18} />
+        <MapPin size={18} className="" />
 
-        <span className="text-xl font-semibold">{data.city}</span>
+        <span className="text-xl font-semibold max-sm:text-sm">
+          {data.city}
+        </span>
       </div>
 
       <div
@@ -76,6 +80,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
             className="
               text-xl
               font-medium
+              max-sm:text-sm
             ">
             {data.date}
           </h2>
@@ -85,6 +90,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
               mt-1
               text-sm
               text-text dark:text-text-dark
+
             `}>
             {data.time}
           </p>
@@ -92,7 +98,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
           <div className="mt-4">
             <span
               className="
-                text-5xl
+                text-3xl
                 font-medium
                 tracking-tight
                 sm:text-6xl
@@ -104,7 +110,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
               className="
                 ml-1
                 align-top
-                text-3xl
+                text-xl
                 sm:text-4xl
               ">
               °C
@@ -118,6 +124,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
               gap-3
               text-sm
               text-text dark:text-text-dark
+              max-sm:text-[10px]
             `}>
             <span>
               {t("dashboard.weather_card.high")}: {Math.round(data.high)}
@@ -141,6 +148,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
             alt={data.description}
             className="
             scale-150
+            max-sm:scale-100
               object-contain
             "
           />
@@ -148,7 +156,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
           <p
             className="
               mt-1
-              text-2xl
+              text-xl
               font-medium
               sm:text-3xl
             ">
@@ -160,6 +168,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
               mt-1
               text-sm
               text-text dark:text-text-dark
+              max-sm:text-[10px]
             `}>
             {t("dashboard.weather_card.feelsLike")} {Math.round(data.feelsLike)}
             °C

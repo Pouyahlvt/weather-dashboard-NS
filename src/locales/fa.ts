@@ -9,6 +9,8 @@ const fa = {
     title: "داشبورد اب و هوا",
     search: "مکان مورد نظر را جستجو کنید",
     weather: " اب و هوا",
+    footer_text: "همه حقوق این سایت برای شرکت مهندسی نادین صدر آریا محفوظ است.",
+    footer_contact: "تماس با ما",
     avrage_title: "میانگین دمای",
     forecast_title: "پیش بینی هفته",
     weather_card: {
