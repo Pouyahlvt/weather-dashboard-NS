@@ -37,8 +37,13 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
         shadow-[0_8px_25px_rgba(0,0,0,0.18)]
         transition-colors
         duration-300
+
+
         sm:p-6
+
+        md:h-80
         md:p-7
+
         max-sm:h-90
 
        bg-card-bg dark:bg-card-bg-dark text-text dark:text-text-dark
@@ -60,7 +65,14 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
         `}>
         <MapPin size={18} className="" />
 
-        <span className="text-xl font-semibold max-sm:text-sm">
+        <span
+          className="
+        text-xl 
+        font-semibold
+        
+        max-lg:text-lg
+
+        max-sm:text-sm">
           {data.city}
         </span>
       </div>
@@ -141,6 +153,7 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
             flex-col
             items-center
             justify-center
+            text
             sm:items-end
           ">
           <img
@@ -156,9 +169,12 @@ export default function CurrentWeatherCard({ data }: WeatherCardProps) {
           <p
             className="
               mt-1
-              text-xl
+              text-3xl
               font-medium
-              sm:text-3xl
+
+              max-lg:text-2xl
+
+              max-sm:text-xl
             ">
             {data.description}
           </p>

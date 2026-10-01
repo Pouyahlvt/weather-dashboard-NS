@@ -61,7 +61,7 @@ const Footer = () => {
     setTimeLang();
   }, [language]);
   return (
-    <footer className="w-full bg-card-bg dark:bg-card-bg py-4 px-6 md:px-10 text-[#1e4e75]">
+    <footer className="w-full bg-card-bg dark:bg-card-bg-dark py-4 px-6 md:px-10 text-text dark:text-text-dark">
       <div className="w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm font-medium">
         {/* Left Section: Logo & Copyright */}
         <div className="flex items-center gap-4">

@@ -1,9 +1,7 @@
 import axios from "axios";
 
-// Open-Meteo needs no API key. Completely free.
-const OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast";
+const OPEN_METEO_ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive";
 
-// Open-Meteo's free geocoding API (no key needed)
 const OPEN_METEO_GEO_URL = "https://geocoding-api.open-meteo.com/v1/search";
 
 export type ChartData = {
@@ -22,17 +20,12 @@ interface GeoResponse {
   results?: GeoResult[];
 }
 
-interface OpenMeteoResponse {
+interface HistoricalWeatherResponse {
   daily: {
     time: string[];
-    temperature_2m_max: number[];
-    temperature_2m_min: number[];
+    temperature_2m_mean: number[];
   };
 }
-
-// ==============================
-// City name -> coordinates (free, no key)
-// ==============================
 
 export async function getCityCoordinates(
   city: string,
@@ -46,59 +39,84 @@ export async function getCityCoordinates(
     },
   });
 
-  console.log("Geocoding response:", response.data);
-
-  if (!response.data.results || !response.data.results.length) {
+  if (!response.data.results?.length) {
     throw new Error(`City not found: ${city}`);
   }
 
   const { latitude, longitude, name, country } = response.data.results[0];
 
-  return { lat: latitude, lon: longitude, name: `${name}, ${country}` };
+  return {
+    lat: latitude,
+    lon: longitude,
+    name: `${name}, ${country}`,
+  };
 }
 
-// ==============================
-// 14-day chart data by city name
-// ==============================
-
-export async function getChartData(
+export async function getMonthlyAverage(
   city: string,
-  days: number = 14,
   language: "en" | "fa" = "en",
 ): Promise<ChartData[]> {
-  // 1. Resolve city name -> coordinates
+  // Get city coordinates
   const { lat, lon } = await getCityCoordinates(city);
 
-  // 2. Fetch 14 days of daily max temperature
-  const response = await axios.get<OpenMeteoResponse>(OPEN_METEO_URL, {
-    params: {
-      latitude: lat,
-      longitude: lon,
-      daily: "temperature_2m_max,temperature_2m_min",
-      forecast_days: days,
-      timezone: "auto",
+  const today = new Date();
+
+  // Last 12 complete months
+  const endDate = new Date(today.getFullYear(), today.getMonth(), 0);
+
+  const startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 11, 1);
+
+  const formatDate = (date: Date) => {
+    return date.toISOString().split("T")[0];
+  };
+
+  const response = await axios.get<HistoricalWeatherResponse>(
+    OPEN_METEO_ARCHIVE_URL,
+    {
+      params: {
+        latitude: lat,
+        longitude: lon,
+
+        start_date: formatDate(startDate),
+        end_date: formatDate(endDate),
+
+        daily: "temperature_2m_mean",
+
+        timezone: "auto",
+      },
     },
+  );
+
+  const { time, temperature_2m_mean } = response.data.daily;
+
+  // Group daily temperatures by month
+  const monthlyData: Record<string, number[]> = {};
+
+  time.forEach((date, index) => {
+    const month = date.slice(0, 7);
+
+    if (!monthlyData[month]) {
+      monthlyData[month] = [];
+    }
+
+    monthlyData[month].push(temperature_2m_mean[index]);
   });
-
-  console.log("Open-Meteo raw response:", response.data);
-
-  const { time, temperature_2m_max } = response.data.daily;
 
   const locale = language === "fa" ? "fa-IR" : "en-US";
 
-  const result: ChartData[] = time.map((dateStr, i) => {
-    const date = new Date(dateStr);
+  return Object.entries(monthlyData).map(([month, temperatures]) => {
+    const average =
+      temperatures.reduce((sum, temp) => sum + temp, 0) / temperatures.length;
+
+    const date = new Date(`${month}-01`);
+
     const label = new Intl.DateTimeFormat(locale, {
-      weekday: "short",
-      day: "numeric",
+      month: "short",
     }).format(date);
 
     return {
       label,
-      value: Math.round(temperature_2m_max[i]),
+      value: Math.round(average),
     };
   });
-
-  console.log("Chart data:", result);
-  return result;
 }

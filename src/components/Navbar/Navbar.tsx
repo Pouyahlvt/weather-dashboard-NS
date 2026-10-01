@@ -13,6 +13,141 @@ interface NavProps {
 const Navbar = ({ city, setCity }: NavProps) => {
   const { t } = useTranslation();
 
+  const cities = [
+    // Middle East
+    "tehran",
+    "yazd",
+    "alborz",
+    "chalus",
+    "kashan",
+    "mashhad",
+    "rasht",
+    "isfahan",
+    "shiraz",
+    "tabriz",
+    "dubai",
+    "abu dhabi",
+    "doha",
+    "riyadh",
+    "jeddah",
+    "istanbul",
+    "ankara",
+    "jerusalem",
+    "tel aviv",
+    "beirut",
+    "amman",
+    "baghdad",
+
+    // Europe
+    "london",
+    "paris",
+    "berlin",
+    "amsterdam",
+    "rome",
+    "moscow",
+    "madrid",
+    "barcelona",
+    "lisbon",
+    "vienna",
+    "prague",
+    "budapest",
+    "warsaw",
+    "athens",
+    "dublin",
+    "copenhagen",
+    "stockholm",
+    "oslo",
+    "helsinki",
+    "zurich",
+    "geneva",
+    "brussels",
+    "milan",
+    "venice",
+    "munich",
+    "frankfurt",
+    "edinburgh",
+    "manchester",
+    "st petersburg",
+    "kyiv",
+
+    // North America
+    "new york",
+    "los angeles",
+    "miami",
+    "toronto",
+    "vancouver",
+    "chicago",
+    "san francisco",
+    "seattle",
+    "boston",
+    "washington dc",
+    "las vegas",
+    "houston",
+    "dallas",
+    "atlanta",
+    "denver",
+    "montreal",
+    "ottawa",
+    "mexico city",
+    "cancun",
+
+    // South America
+    "sao paulo",
+    "rio de janeiro",
+    "buenos aires",
+    "lima",
+    "bogota",
+    "santiago",
+    "caracas",
+
+    // Asia
+    "tokyo",
+    "osaka",
+    "kyoto",
+    "seoul",
+    "busan",
+    "beijing",
+    "shanghai",
+    "hong kong",
+    "singapore",
+    "bangkok",
+    "kuala lumpur",
+    "jakarta",
+    "manila",
+    "hanoi",
+    "ho chi minh",
+    "mumbai",
+    "delhi",
+    "bangalore",
+    "kolkata",
+    "karachi",
+    "lahore",
+    "dhaka",
+    "kathmandu",
+    "colombo",
+
+    // Africa
+    "cairo",
+    "alexandria",
+    "casablanca",
+    "marrakech",
+    "nairobi",
+    "lagos",
+    "cape town",
+    "johannesburg",
+    "addis ababa",
+    "tunis",
+    "accra",
+
+    // Oceania
+    "sydney",
+    "melbourne",
+    "brisbane",
+    "perth",
+    "auckland",
+    "wellington",
+  ];
+
   return (
     <section
       className="w-full h-20 flex items-center justify-between shadow-xl/50 bg-dashbord-bg max-sm:h-15
@@ -34,20 +169,60 @@ const Navbar = ({ city, setCity }: NavProps) => {
           value={city}
           onChange={(_e, newValue) => setCity(newValue ? newValue : city)}
           disablePortal
-          options={["tehran", "New York", "los angeles"]}
-          className="w-75 max-md:w-55 max-sm:w-full max-sm:text-sm"
+          options={cities}
+          getOptionLabel={(option) =>
+            t(`dashboard.city.${option.toLowerCase()}`)
+          }
+          className="w-75 max-md:w-55 max-sm:max-w-45"
           sx={{
-            // 👇 CHANGE THESE TWO LINES TO ANY COLOR YOU WANT
-            color: "black", // light mode color
+            color: "black",
+
             "&.dark, .dark &": {
-              color: "white", // dark mode color
+              color: "white",
             },
 
-            // apply to all inner MUI parts
-            "& .MuiInputBase-root": { color: "inherit" },
-            "& .MuiInputBase-input": { color: "inherit" },
-            "& .MuiInputLabel-root": { color: "inherit" },
-            "& .MuiSvgIcon-root": { color: "inherit" },
+            "& .MuiInputBase-root": {
+              color: "inherit",
+
+              "@media (max-width:600px)": {
+                height: "38px",
+                fontSize: "13px",
+              },
+            },
+
+            "& .MuiInputBase-input": {
+              color: "inherit",
+
+              "@media (max-width:600px)": {
+                fontSize: "13px",
+                padding: "6px 8px !important",
+              },
+            },
+
+            "& .MuiInputLabel-root": {
+              color: "inherit",
+
+              "@media (max-width:600px)": {
+                fontSize: "13px",
+                transform: "translate(14px, 10px) scale(1)",
+              },
+            },
+
+            "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
+              {
+                "@media (max-width:600px)": {
+                  transform: "translate(14px, -9px) scale(0.75)",
+                },
+              },
+
+            "& .MuiSvgIcon-root": {
+              color: "inherit",
+
+              "@media (max-width:600px)": {
+                fontSize: "18px",
+              },
+            },
+
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "currentColor",
             },
@@ -57,14 +232,29 @@ const Navbar = ({ city, setCity }: NavProps) => {
               sx: {
                 bgcolor: "white",
                 color: "black",
+
                 ".dark &": {
                   bgcolor: "#1a1a1a",
                   color: "white",
                 },
-                "& .MuiAutocomplete-option": { color: "inherit" },
+
+                "& .MuiAutocomplete-option": {
+                  color: "inherit",
+
+                  // Smaller options on mobile
+                  "@media (max-width:600px)": {
+                    minHeight: "32px",
+                    fontSize: "12px",
+                    padding: "5px 10px",
+                  },
+                },
+
                 '& .MuiAutocomplete-option[aria-selected="true"]': {
                   bgcolor: "#e1e9ee",
-                  ".dark &": { bgcolor: "#292f45" },
+
+                  ".dark &": {
+                    bgcolor: "#292f45",
+                  },
                 },
               },
             },

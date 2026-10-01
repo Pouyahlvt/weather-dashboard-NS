@@ -15,8 +15,8 @@ const ForeCastCard = ({ day, temp, icon }: CardProps) => {
         <img src={icon} alt="weather condition" className="" />
       </div>
       <div className="w-full flex justify-center">
-        <span className="text-text dark:text-text-dark  text-3xl max-lg:text-2xl max-sm:text-lg">
-          {temp} : ℃
+        <span className="font-semibold text-text dark:text-text-dark  text-3xl max-lg:text-2xl max-sm:text-lg">
+          {temp} ℃
         </span>
       </div>
     </div>

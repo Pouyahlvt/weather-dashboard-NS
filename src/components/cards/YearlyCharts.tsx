@@ -40,39 +40,77 @@ export default function AverageChart({
       dir="rtl"
       className="
         w-full
-        overflow-hidden
         h-70
+        overflow-hidden
         rounded-[28px]
-        bg-card-bg dark:bg-card-bg-dark p-4 ms:p-6
-        text-text dark:text-text-dark
+        bg-card-bg
+        p-4
+        text-text
+        dark:bg-card-bg-dark
+        dark:text-text-dark
+
+        sm:p-5
+        md:h-80
+        lg:p-6
       ">
-      <h2 className="mb-2 text-right text-base font-medium text-text dark:text-text-dark sm:text-lg mx-5">
+      <h2
+        className="
+          mx-2
+          mb-2
+          text-right
+          text-base
+          font-medium
+          text-text
+          dark:text-text-dark
+
+          sm:mx-3
+          sm:text-lg
+
+          lg:mx-5
+        ">
         {t("dashboard.avrage_title")}
       </h2>
 
-      <div className="h-55 w-full -translate-x-5">
+      <div
+        className="
+          h-55
+          w-full
+
+          sm:h-60
+
+          lg:h-65
+        ">
         <LineChart
           xAxis={[
             {
               scaleType: "point",
               data: labels,
+
               tickLabelStyle: {
                 fill: "currentcolor",
                 fontSize: 10,
               },
+
               tickSize: 0,
             },
           ]}
           yAxis={[
             {
-              min: -40,
+              min: -10,
               max: 40,
+
+              // Fewer labels on small screens
               tickNumber: 5,
+
               tickLabelStyle: {
                 fill: "currentcolor",
-                fontSize: 12,
+                fontSize: 11,
+                translate: -18,
               },
+
               tickSize: 0,
+
+              width: 22,
             },
           ]}
           series={[
@@ -85,6 +123,12 @@ export default function AverageChart({
           ]}
           grid={{
             horizontal: true,
+          }}
+          margin={{
+            left: 0,
+            right: 8,
+            top: 10,
+            bottom: 25,
           }}
           sx={{
             width: "100%",

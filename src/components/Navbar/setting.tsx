@@ -134,8 +134,8 @@ export default function SettingsButton() {
             className="bg-dashbord-bg dark:bg-dashbord-bg-dark text-text dark:text-text-dark"
             onClick={() => changeLanguage("en")}
             sx={{
-              borderColor: "primary.main",
-              color: "primary.main",
+              borderColor: language === "en" ? "primary.main" : "divdir",
+              color: language === "en" ? "primary.main" : "text.secondary",
               bgcolor: language === "en" ? "#fafafa10" : "transparent",
             }}>
             En
@@ -144,8 +144,8 @@ export default function SettingsButton() {
             className="bg-dashbord-bg dark:bg-dashbord-bg-dark text-text dark:text-text-dark"
             onClick={() => changeLanguage("fa")}
             sx={{
-              borderColor: "primary.main",
-              color: "primary.main",
+              borderColor: language === "fa" ? "primary.main" : "divdir",
+              color: language === "fa" ? "primary.main" : "text.secondary",
               bgcolor: language === "fa" ? "#fafafa10" : "transparent",
             }}>
             {t("common.persian")}

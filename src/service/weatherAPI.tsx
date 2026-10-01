@@ -73,8 +73,6 @@ export async function getCoordinates(
     },
   });
 
-  console.log("Geocoding response:", response.data);
-
   if (!response.data.length) {
     throw new Error(`City not found: ${city}`);
   }
@@ -131,8 +129,6 @@ export async function getForecast(city: string): Promise<ForecastDay[]> {
     },
   );
 
-  console.log("Raw forecast response:", response.data);
-
   const { list, city: cityInfo } = response.data;
 
   const groups = new Map<string, OpenWeatherForecastItem[]>();
@@ -174,7 +170,6 @@ export async function getForecast(city: string): Promise<ForecastDay[]> {
   }
 
   const finalResult = result.slice(0, 7);
-  console.log("Aggregated forecast:", finalResult);
 
   return finalResult;
 }

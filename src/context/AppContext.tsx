@@ -24,13 +24,7 @@ interface AppProviderProps {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-  const [language, setLanguage] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem("language");
-
-    return savedLanguage === "fa" || savedLanguage === "en"
-      ? savedLanguage
-      : "en";
-  });
+  const [language, setLanguage] = useState<Language>("en");
 
   const [theme, setTheme] = useState<Theme>(() => {
     const savedTheme = localStorage.getItem("theme");
